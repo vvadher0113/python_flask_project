@@ -1,19 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ title }}</title>
+    <title>My Flask Website</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Welcome to My Python Flask Website</h1>
+    <div class="container">
+        <h1>Welcome to My Flask Website</h1>
+        <p>This website is running inside a Docker container.</p>
 
-    <p>This is a simple website built using Python and Flask.</p>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Enter your name">
+            <button type="submit">Say Hello</button>
+        </form>
 
-    <h3>Test URLs:</h3>
-    <ul>
-        <li><a href="/">Home Page</a></li>
-        <li><a href="/hello">Hello Page</a></li>
-        <li><a href="/hello?name=Vijay">Hello with Name</a></li>
-        <li><a href="/health">Health Check</a></li>
-    </ul>
+        {% if name %}
+            <div class="message">
+                Hello, {{ name }}! You are learning Flask and Docker.
+            </div>
+        {% endif %}
+
+        <div class="cards">
+            <div class="card">
+                <h3>Python</h3>
+                <p>Backend application using Flask.</p>
+            </div>
+
+            <div class="card">
+                <h3>Docker</h3>
+                <p>Containerized app running on your Docker host.</p>
+            </div>
+
+            <div class="card">
+                <h3>Next Step</h3>
+                <p>Add database, login, and API endpoints.</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
