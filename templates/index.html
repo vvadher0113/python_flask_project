@@ -7,16 +7,18 @@
 <body>
     <div class="container">
         <h1>Welcome to My Flask Website</h1>
-        <p>This website is running inside a Docker container.</p>
+        <p>This website is running with Python Flask and MySQL.</p>
 
         <form method="POST">
-            <input type="text" name="name" placeholder="Enter your name">
-            <button type="submit">Say Hello</button>
+            <input type="text" name="name" placeholder="Enter your name" required>
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <textarea name="message" placeholder="Enter your message" required></textarea>
+            <button type="submit">Save Message</button>
         </form>
 
-        {% if name %}
-            <div class="message">
-                Hello, {{ name }}! You are learning Flask and Docker.
+        {% if success_message %}
+            <div class="success-message">
+                {{ success_message }}
             </div>
         {% endif %}
 
@@ -32,9 +34,22 @@
             </div>
 
             <div class="card">
-                <h3>Next Step</h3>
-                <p>Add database, login, and API endpoints.</p>
+                <h3>MySQL</h3>
+                <p>Form data is saved into a MySQL database.</p>
             </div>
+        </div>
+
+        <h2>Saved Messages</h2>
+
+        <div class="messages">
+            {% for item in messages %}
+                <div class="message-card">
+                    <h3>{{ item.name }}</h3>
+                    <p><strong>Email:</strong> {{ item.email }}</p>
+                    <p>{{ item.message }}</p>
+                    <small>{{ item.created_at }}</small>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </body>

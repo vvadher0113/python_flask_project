@@ -7,6 +7,7 @@ app = Flask(__name__)
 def get_db_connection():
     return mysql.connector.connect(
         host="10.0.0.4",
+        port=3306,
         user="flaskuser",
         password="flaskpassword",
         database="flaskdb"
@@ -15,12 +16,44 @@ def get_db_connection():
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    name = None
+    success_message = None
 
     if request.method == "POST":
         name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
 
-    return render_template("index.html", name=name)
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        sql = """
+            INSERT INTO messages (name, email, message)
+            VALUES (%s, %s, %s)
+        """
+        values = (name, email, message)
+
+        cursor.execute(sql, values)
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        success_message = "Your message was saved successfully!"
+
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM messages ORDER BY created_at DESC")
+    messages = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return render_template(
+        "index.html",
+        success_message=success_message,
+        messages=messages
+    )
 
 
 @app.route("/health")
@@ -63,4 +96,3 @@ def db_test():
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
-    
